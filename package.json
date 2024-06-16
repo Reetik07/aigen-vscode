@@ -1,0 +1,77 @@
+{
+  "name": "aigen",
+  "displayName": "aigen",
+  "description": "AI Code Generator",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.85.1"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "aigen",
+        "title": "AIGEN"
+      },
+      {
+        "command": "aigen.buttonCommand",
+        "title": "Button Command"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "aigenContainer",
+          "title": "AIGEN",
+          "icon": "code.png"
+        }
+      ]
+    },
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "aigen",
+          "when": "true",
+          "group": "navigation"
+        }
+      ]
+    },
+    "views": {
+      "aigenContainer": [
+        {
+          "id": "aigenView",
+          "name": "AIGEN",
+          "type": "webview"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "aigenView",
+        "contents": "In order to use aigen features, you can import an existing project or we will configure a new project for you.\n[New Project](command:aigen)\n[Import Exisiting Project](command:vscode.openFolder)"
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.85.0",
+    "@vscode/test-cli": "^0.0.4",
+    "@vscode/test-electron": "^2.3.9",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "openai": "^4.28.0",
+    "simple-git": "^3.22.0"
+  }
+}

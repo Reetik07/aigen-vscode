@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modify Project</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #1e1e1e;
+        color: #d4d4d4;
+        margin: 0;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+
+      .checkbox-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .checkbox-input {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 16px;
+        height: 16px;
+        border: 2px solid #d4d4d4;
+        border-radius: 3px;
+        margin-right: 10px;
+        cursor: pointer;
+        outline: none;
+        position: relative;
+        transition: background-color 0.3s;
+        line-height: 1; /* Ensure consistent line height */
+        flex-shrink: 0; /* Prevent shrinking of checkbox */
+      }
+
+      .checkbox-input:checked {
+        background-color: #007acc;
+        border-color: #007acc;
+      }
+
+      .checkbox-input:checked::after {
+        content: "✓";
+        font-size: 12px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #ffffff;
+      }
+
+      .checkbox-label {
+        font-size: 14px;
+        color: #d4d4d4;
+        line-height: 1; /* Ensure consistent line height */
+      }
+      textarea {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        background-color: #181818;
+        color: white;
+      }
+      button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #007acc;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea
+      id="userInput"
+      placeholder="Enter something..."
+      rows="10"
+    ></textarea>
+    <div
+      class="checkbox-container"
+      style="margin-top: 20px; display: '$display'"
+    >
+      <input type="checkbox" id="commitCheckbox" class="checkbox-input" />
+      <label for="commitCheckbox" class="checkbox-label"
+        >Commit the changes</label
+      >
+    </div>
+
+    <div
+      id="branchSelect"
+      style="display: none; align-items: center; margin-bottom: 20px"
+    >
+      <label for="selectOption" style="width: 150px">Select branch:</label>
+      <select
+        id="selectOption"
+        style="
+          width: 350px;
+          background-color: #181818;
+          color: white;
+          border: 0;
+          /* padding: 0.5rem; */
+          padding-left: 0.5rem;
+          margin-right: 20px;
+          border: 1px solid white;
+          height: 40px;
+          line-height: 40px;
+        "
+      >
+        $options
+        <option value="addNewBranch">Add new branch</option>
+      </select>
+    </div>
+    <div id="newBranch" style="display: none; margin-left: 150px">
+      <input
+        type="text"
+        id="newBranchInput"
+        placeholder="New branch name"
+        style="
+          width: 335px;
+          padding: 0.5rem;
+          background-color: #181818;
+          color: white;
+          border: 1px solid white;
+          margin-bottom: 20px;
+        "
+      />
+    </div>
+    <div
+      id="commitMessage"
+      style="display: none; align-items: center; margin-bottom: 20px"
+    >
+      <label for="commitMessageInput" style="width: 150px"
+        >Commit Message:</label
+      >
+      <input
+        type="text"
+        id="commitMessageInput"
+        placeholder="Enter a commit message"
+        style="
+          width: 335px;
+          padding: 0.5rem;
+          background-color: #181818;
+          color: white;
+          border: 1px solid white;
+        "
+      />
+    </div>
+
+    <script>
+      const selectOption = document.getElementById("selectOption");
+      const newOptionContainer = document.getElementById("newBranch");
+      const commitCheckbox = document.getElementById("commitCheckbox");
+      const branchSelect = document.getElementById("branchSelect");
+      const commitMessage = document.getElementById("commitMessage");
+      const selectContainer = selectOption.addEventListener(
+        "change",
+        function () {
+          const selectedValue = selectOption.value;
+          if (selectedValue === "addNewBranch") {
+            newOptionContainer.style.display = "block";
+          } else {
+            newOptionContainer.style.display = "none";
+          }
+        }
+      );
+
+      commitCheckbox.addEventListener("change", function () {
+        if (commitCheckbox.checked) {
+          branchSelect.style.display = "flex";
+          commitMessage.style.display = "flex";
+        } else {
+          branchSelect.style.display = "none";
+          commitMessage.style.display = "none";
+        }
+      });
+
+      function addNewOption() {
+        const select = document.getElementById("selectOption");
+        const newOptionInput = document.getElementById("newBranchInput");
+        const newOptionValue = newOptionInput.value.trim();
+
+        if (newOptionValue !== "") {
+          // Check if the option already exists
+          if (
+            [...select.options].some(
+              (option) => option.value === newOptionValue
+            )
+          ) {
+            alert("Option already exists!");
+            return;
+          }
+
+          // Add the new option to the select
+          const newOption = document.createElement("option");
+          newOption.value = newOptionValue;
+          newOption.textContent = newOptionValue;
+          select.insertBefore(newOption, select.lastElementChild);
+
+          // Select the newly added option
+          select.value = newOptionValue;
+
+          // Hide the new option container
+          newOptionContainer.style.display = "none";
+
+          // Clear the input field
+          newOptionInput.value = "";
+        } else {
+          alert("Please enter a valid option!");
+        }
+      }
+    </script>
+    <button id="submitRequest">Submit</button>
+
+    <script>
+      const vscode = acquireVsCodeApi();
+      document.getElementById("submitRequest").addEventListener("click", () => {
+        const userRequest = document.getElementById("userInput").value;
+        const commit = document.getElementById("commitCheckbox").checked;
+        const selectOption = document.getElementById("selectOption").value;
+        const newBranchInput = document.getElementById("newBranchInput").value;
+        const commitMessage =
+          document.getElementById("commitMessageInput").value;
+
+        if (commit && selectOption === "addNewBranch") {
+          vscode.postMessage({
+            command: "submitInput",
+            userRequest: userRequest,
+            commit: true,
+            newBranch: true,
+            branchName: newBranchInput,
+            commitMessage: commitMessage,
+          });
+        } else if (commit) {
+          vscode.postMessage({
+            command: "submitInput",
+            userRequest: userRequest,
+            commit: true,
+            newBranch: false,
+            branchName: selectOption,
+            commitMessage: commitMessage,
+          });
+        } else {
+          vscode.postMessage({
+            command: "submitInput",
+            userRequest: userRequest,
+            commit: false,
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

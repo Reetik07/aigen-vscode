@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Configuration</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      label {
+        display: block;
+        margin-bottom: 10px;
+      }
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 5px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+      button {
+        padding: 10px 20px;
+        background-color: #007acc;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #005f80;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Project Configuration</h2>
+    <div style="display: flex">
+      <label for="projectName" style="width: 17%">Project Name:</label>
+      <input
+        type="text"
+        id="projectName"
+        placeholder="Enter project name"
+        style="
+          width: 30%;
+          background-color: #181818;
+          color: white;
+          border: 0;
+          padding: 0.5rem;
+        "
+      />
+    </div>
+    <br />
+    <div style="display: flex">
+      <label for="projectDescription" style="width: 17%"
+        >Project Description:</label
+      >
+      <textarea
+        id="projectDescription"
+        rows="10"
+        placeholder="Enter project description"
+        style="
+          width: 30%;
+          background-color: #181818;
+          color: white;
+          border: 0;
+          padding: 0.5rem;
+        "
+      ></textarea>
+    </div>
+    <br />
+    <div style="display: flex">
+      <label for="framework" style="width: 17%">Framework:</label>
+      <select
+        id="framework"
+        style="
+          width: 31%;
+          background-color: #181818;
+          color: white;
+          border: 0;
+          padding: 0.5rem;
+        "
+      >
+        <option value="Node JS">Node JS</option>
+        <option value="React JS">React JS</option>
+        <option value="Django">Django</option>
+        <option value="Flask">Flask</option>
+      </select>
+    </div>
+    <br />
+    <button
+      id="configureBtn"
+      style="
+        background-color: #3b71ca;
+        color: white;
+        border: 0;
+        border-radius: 0.2rem;
+        padding: 0.75rem;
+      "
+    >
+      Configure Project
+    </button>
+
+    <script>
+      const vscode = acquireVsCodeApi();
+
+      document.getElementById("configureBtn").addEventListener("click", () => {
+        const projectName = document.getElementById("projectName").value;
+        const projectDescription =
+          document.getElementById("projectDescription").value;
+        const framework = document.getElementById("framework").value;
+
+        vscode.postMessage({
+          command: "configureProject",
+          projectName: projectName,
+          projectDescription: projectDescription,
+          framework: framework,
+        });
+      });
+    </script>
+  </body>
+</html>
